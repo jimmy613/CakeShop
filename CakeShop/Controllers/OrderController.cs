@@ -42,6 +42,7 @@ namespace CakeShop.Controllers
             _context.Orders.Add(order);
             await _context.SaveChangesAsync();
 
+
             // 發送訂單確認信
             string subject = "您的蛋糕訂單已確認！";
             string message = $"親愛的顧客您好，<br>您已成功訂購 {quantity} 份 {cake.Name}，總價為 {order.TotalPrice} 元。<br>感謝您的購買！";
@@ -66,5 +67,21 @@ namespace CakeShop.Controllers
 
             return RedirectToAction("Index");
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Index()
+        {
+            var user = await _userManager.GetUserAsync(User);
+
+            // 取得該會員的訂單，並包含蛋糕的詳細資訊
+            var orders = await _context.Orders
+                .Include(o => o.Cake)
+                .Where(o => o.UserId == user.Id)
+                .OrderByDescending(o => o.OrderDate)
+                .ToListAsync();
+
+            return View(orders);
+        }
+
     }
 }
