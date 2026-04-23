@@ -14,7 +14,7 @@ COPY --from=build /app/publish .
 
 # 設定環境變數，讓 .NET 監聽 Render 分配的 Port
 ENV ASPNETCORE_HTTP_PORTS=8080
-EXPOSE 8080
+EXPOSE 10000
 
 # 請確保這裡的 dll 名稱與你的專案名稱完全一致 (大小寫視為不同)
 ENTRYPOINT ["dotnet", "CakeShop.dll"]
